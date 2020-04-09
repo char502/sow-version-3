@@ -5,5 +5,32 @@
 }
 
 .title {
-  color: white;
+  background: #001529;
 }
+
+h1 {
+  /* color: white; */
+  margin: 10px;
+  font-size: 30px;
+  color: #1890ff;
+}
+
+header.ant-layout-header {
+  margin: 0;
+}
+
+.site-layout-content {
+  background: #fff;
+  padding: 24px;
+  min-height: 280px;
+}
+
+/* #1890FF - Colour of highlighted menu item */
+
+/* #components-layout-demo-top .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0;
+  float: left;
+} */
