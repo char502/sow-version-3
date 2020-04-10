@@ -12,42 +12,30 @@ import {
   Checkbox,
 } from "antd";
 import "./App.css";
+import Nav from "./components/Nav";
+import SOW_Form from "./components/SOW_Form";
+import RetrievePrevious from "./components/RetrievePrevious";
+import ProfessionalServices from "./components/ProfessionalServices";
 
 const { Header, Content, Footer } = Layout;
 
 function App() {
   return (
-    <Layout className="layout">
-      <div className="title">
-        <h1 className="main-heading">Statement of Work (SOW) Application</h1>
-      </div>
+    <div>
+      <Router>
+        <Nav />
+        <Switch>
+          <Route exact path="/" component={SOW_Form} />
+          <Route path="/RetrievePrevious" component={RetrievePrevious} />
+          <Route
+            path="/ProfessionalServices"
+            component={ProfessionalServices}
+          />
+        </Switch>
+      </Router>
 
-      <Header>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1">PDF Generator</Menu.Item>
-          <Menu.Item key="2">Retrieve Previous</Menu.Item>
-          <Menu.Item key="3">Professional Services </Menu.Item>
-        </Menu>
-      </Header>
-      <Content style={{ padding: "25px" }}>
-        <div className="site-layout-content">
-          <Form>
-            <Form.Item name="radio-group" label="Service Region">
-              <div>
-                <Radio.Group>
-                  <Radio value="a">EMEA</Radio>
-                  <Radio value="b">APAC</Radio>
-                  <Radio value="c">NA & LATAM</Radio>
-                </Radio.Group>
-              </div>
-            </Form.Item>
-          </Form>
-        </div>
-      </Content>
-      {/* <Footer style={{ textAlign: "center" }}>
-        SOW PDF Generator
-      </Footer> */}
-    </Layout>
+      <Footer style={{ textAlign: "center" }}>SOW PDF Generator</Footer>
+    </div>
   );
 }
 

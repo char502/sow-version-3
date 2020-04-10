@@ -15,14 +15,14 @@ h1 {
   color: #1890ff;
 }
 
-header.ant-layout-header {
+/* header.ant-layout-header {
   margin: 0;
-}
+} */
 
 .site-layout-content {
   background: #fff;
   padding: 24px;
-  min-height: 280px;
+  /* min-height: 280px; */
 }
 
 /* #1890FF - Colour of highlighted menu item */
