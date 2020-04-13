@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Form, { Field } from "rc-field-form";
 import {
   Layout,
   PageHeader,
   Card,
-  Form,
   Input,
   Button,
   Radio,
@@ -13,277 +13,431 @@ import {
   Select,
   AutoComplete,
   Divider,
+  Menu,
+  Dropdown,
 } from "antd";
 
-import { QuestionCircleOutlined } from "@ant-design/icons";
+const sowOptions = [
+  {
+    name: "DXI",
+    subOptions: ["option1", "option2", "option3"],
+  },
+  {
+    name: "GGG",
+    subOptions: ["option1", "option2", "option3"],
+  },
+  {
+    name: "ABC",
+    subOptions: ["option1", "option2", "option3"],
+  },
+];
 
-const { Option } = Select;
-const { Content } = Layout;
-
-const AutoCompleteOption = AutoComplete.Option;
+const teraDataOptions = [
+  {
+    name: "Tera1",
+    subOptions: ["tera1Option1", "tera1Option2", "tera1Option3"],
+  },
+  {
+    name: "Tera2",
+    subOptions: ["tera2Option1", "tera2Option2", "tera2Option3"],
+  },
+  {
+    name: "Tera3",
+    subOptions: ["tera3Option1", "tera3Option2", "tera3Option3"],
+  },
+];
 
 function SOW_Form() {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const [form, setForm] = useState({
+    sow: [],
+    teradata: [],
+  });
+  const [uiVisibility, setUiVisibility] = useState({
+    sow: false,
+    teradata: false,
+    customServices: false,
+  });
+
+  const handleCategories = (name) =>
+    setUiVisibility({ ...uiVisibility, [name]: !uiVisibility[name] });
+
+  const handleDropdowns = (key, value) => {
+    setForm({ ...form, [key]: [...form[key], value] });
   };
 
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-      >
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  );
+  // console.log(form);
 
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(form);
 
-  const onWebsiteChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        [".com", ".org", ".net"].map((domain) => `${value}${domain}`)
-      );
-    }
+    setForm({ sow: [], teradata: [] });
+
+    console.log(form.sow, form.teradata);
   };
 
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
+  console.log(form);
 
   return (
-    <div>
-      <Content style={{ padding: "25px", backgroundColor: "#F0F2F5" }}>
-        <div className="site-layout-content">
-          <Form
-            initialValues={{
-              productSOW: false,
-            }}
-            /* onFinish={onFinish}
-            onFinishFailed={onFinishFailed} */
-          >
-            {/* <PageHeader
-              title="Service Region"
-              /* subTitle="This is a subtitle" 
-              /> */}
-            <Card title="Service Region" bordered={true} style={{ width: 900 }}>
-              <Form.Item name="radio-group" /* label="Customer Information" */>
-                <div>
-                  <Radio.Group>
-                    <Radio value="a">EMEA</Radio>
-                    <Radio value="b">APAC</Radio>
-                    <Radio value="c">NA & LATAM</Radio>
-                  </Radio.Group>
-                </div>
-              </Form.Item>
-            </Card>
-            <Divider />
-            <Card
-              title="Customer Information"
-              bordered={true}
-              style={{ width: 900 }}
-            >
-              <Form.Item
-                name="customer-information"
-                /* label="Customer Information" */
-              >
-                <Form.Item
-                  label="Company Name"
-                  name="companyName"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input company name!",
-                    },
-                  ]}
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>
+          <input type="checkbox" onClick={() => handleCategories("sow")} />
+          Product Sow
+          {uiVisibility.sow &&
+            sowOptions.map((option) => (
+              <Card>
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      {option.subOptions.map((cell) => (
+                        <Menu.Item
+                          onClick={() => handleDropdowns("sow", cell)}
+                          key={cell}
+                        >
+                          {cell}
+                        </Menu.Item>
+                      ))}
+                    </Menu>
+                  }
                 >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Address Line1"
-                  name="AddressLine1"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Address Line1!",
-                    },
-                  ]}
+                  <h3>{option.name}</h3>
+                </Dropdown>
+              </Card>
+            ))}
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" onClick={() => handleCategories("teradata")} />
+          Teradata Customer SOW
+          {uiVisibility.teradata &&
+            teraDataOptions.map((option) => (
+              <Card>
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      {option.subOptions.map((cell) => (
+                        <Menu.Item
+                          onClick={() => handleDropdowns("teradata", cell)}
+                          key={cell}
+                        >
+                          {cell}
+                        </Menu.Item>
+                      ))}
+                    </Menu>
+                  }
                 >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Address Line2"
-                  name="AddressLine2"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input company name!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Address Line3"
-                  name="AddressLine3"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input company name!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Town/City"
-                  name="TownCity"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Town/City!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Region"
-                  name="Region"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Region!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Postcode/Zip"
-                  name="postcodeZip"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Region!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Country"
-                  name="country"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Country!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  name="phone"
-                  label="Phone Number"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your phone number!",
-                    },
-                  ]}
-                >
-                  <Input
-                    addonBefore={prefixSelector}
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  name="email"
-                  label="E-mail"
-                  rules={[
-                    {
-                      type: "email",
-                      message: "The input is not valid E-mail!",
-                    },
-                    {
-                      required: true,
-                      message: "Please input your E-mail!",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  name="website"
-                  label="Website"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input website!",
-                    },
-                  ]}
-                >
-                  <AutoComplete
-                    options={websiteOptions}
-                    onChange={onWebsiteChange}
-                    placeholder="website"
-                  >
-                    <Input />
-                  </AutoComplete>
-                </Form.Item>
-              </Form.Item>
-            </Card>
-            <Divider />
-            <Card title="SOW Type" bordered={true} style={{ width: 900 }}>
-              <h3>What type of SOW do you want to generate?</h3>
-              <Form.Item name="productSOW" valuePropName="productSOW">
-                <Checkbox>Product SOW</Checkbox>
-              </Form.Item>
-              <Form.Item
-                name="teradataCustomerSOW"
-                valuePropName="teradataCustomerSOW"
-              >
-                <Checkbox>Teradata Customer SOW</Checkbox>
-              </Form.Item>
-              <Form.Item
-                name="customProfessionalServicesSOW"
-                valuePropName="customProfessionalServicesSOW"
-              >
-                <Checkbox>Custom Professional Services SOW</Checkbox>
-              </Form.Item>
-            </Card>
-            <Form.Item style={{ padding: "20px" }}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      </Content>
-    </div>
+                  <h3>{option.name}</h3>
+                </Dropdown>
+              </Card>
+            ))}
+        </label>
+      </div>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            onClick={() => handleCategories("customServices")}
+          />
+          Custom Professional Services SOW
+        </label>
+      </div>
+      <input type="submit" value="Submit" />
+    </form>
   );
 }
 
 export default SOW_Form;
+
+// ==========================================================
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   Layout,
+//   PageHeader,
+//   Card,
+//   Form,
+//   Input,
+//   Button,
+//   Radio,
+//   Checkbox,
+//   Tooltip,
+//   Cascader,
+//   Select,
+//   AutoComplete,
+//   Divider,
+// } from "antd";
+
+// import { QuestionCircleOutlined } from "@ant-design/icons";
+
+// const { Option } = Select;
+// const { Content } = Layout;
+
+// const AutoCompleteOption = AutoComplete.Option;
+
+// function SOW_Form() {
+//   const onFinish = (values) => {
+//     console.log("Received values of form: ", values);
+//   };
+
+//   const prefixSelector = (
+//     <Form.Item name="prefix" noStyle>
+//       <Select
+//         style={{
+//           width: 70,
+//         }}
+//       >
+//         <Option value="86">+86</Option>
+//         <Option value="87">+87</Option>
+//       </Select>
+//     </Form.Item>
+//   );
+
+//   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+
+//   const onWebsiteChange = (value) => {
+//     if (!value) {
+//       setAutoCompleteResult([]);
+//     } else {
+//       setAutoCompleteResult(
+//         [".com", ".org", ".net"].map((domain) => `${value}${domain}`)
+//       );
+//     }
+//   };
+
+//   const websiteOptions = autoCompleteResult.map((website) => ({
+//     label: website,
+//     value: website,
+//   }));
+
+//   return (
+//     <div>
+//       <Content style={{ padding: "25px", backgroundColor: "#F0F2F5" }}>
+//         <div className="site-layout-content">
+//           <Form
+//             initialValues={{
+//               productSOW: false,
+//             }}
+//             /* onFinish={onFinish}
+//             onFinishFailed={onFinishFailed} */
+//           >
+//             {/* <PageHeader
+//               title="Service Region"
+//               /* subTitle="This is a subtitle"
+//               /> */}
+//             <Card title="Service Region" bordered={true} style={{ width: 900 }}>
+//               <Form.Item name="radio-group" /* label="Customer Information" */>
+//                 <div>
+//                   <Radio.Group>
+//                     <Radio value="a">EMEA</Radio>
+//                     <Radio value="b">APAC</Radio>
+//                     <Radio value="c">NA & LATAM</Radio>
+//                   </Radio.Group>
+//                 </div>
+//               </Form.Item>
+//             </Card>
+//             <Divider />
+//             <Card
+//               title="Customer Information"
+//               bordered={true}
+//               style={{ width: 900 }}
+//             >
+//               <Form.Item
+//                 name="customer-information"
+//                 /* label="Customer Information" */
+//               >
+//                 <Form.Item
+//                   label="Company Name"
+//                   name="companyName"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input company name!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Address Line1"
+//                   name="AddressLine1"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input Address Line1!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Address Line2"
+//                   name="AddressLine2"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input company name!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Address Line3"
+//                   name="AddressLine3"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input company name!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Town/City"
+//                   name="TownCity"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input Town/City!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Region"
+//                   name="Region"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input Region!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Postcode/Zip"
+//                   name="postcodeZip"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input Region!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   label="Country"
+//                   name="country"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input Country!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   name="phone"
+//                   label="Phone Number"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input your phone number!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input
+//                     addonBefore={prefixSelector}
+//                     style={{
+//                       width: "100%",
+//                     }}
+//                   />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   name="email"
+//                   label="E-mail"
+//                   rules={[
+//                     {
+//                       type: "email",
+//                       message: "The input is not valid E-mail!",
+//                     },
+//                     {
+//                       required: true,
+//                       message: "Please input your E-mail!",
+//                     },
+//                   ]}
+//                 >
+//                   <Input />
+//                 </Form.Item>
+
+//                 <Form.Item
+//                   name="website"
+//                   label="Website"
+//                   rules={[
+//                     {
+//                       required: true,
+//                       message: "Please input website!",
+//                     },
+//                   ]}
+//                 >
+//                   <AutoComplete
+//                     options={websiteOptions}
+//                     onChange={onWebsiteChange}
+//                     placeholder="website"
+//                   >
+//                     <Input />
+//                   </AutoComplete>
+//                 </Form.Item>
+//               </Form.Item>
+//             </Card>
+//             <Divider />
+//             <Card title="SOW Type" bordered={true} style={{ width: 900 }}>
+//               <h3>What type of SOW do you want to generate?</h3>
+//               <Form.Item name="productSOW" valuePropName="productSOW">
+//                 <Checkbox>Product SOW</Checkbox>
+//               </Form.Item>
+//               <Form.Item
+//                 name="teradataCustomerSOW"
+//                 valuePropName="teradataCustomerSOW"
+//               >
+//                 <Checkbox>Teradata Customer SOW</Checkbox>
+//               </Form.Item>
+//               <Form.Item
+//                 name="customProfessionalServicesSOW"
+//                 valuePropName="customProfessionalServicesSOW"
+//               >
+//                 <Checkbox>Custom Professional Services SOW</Checkbox>
+//               </Form.Item>
+//             </Card>
+//             <Form.Item style={{ padding: "20px" }}>
+//               <Button type="primary" htmlType="submit">
+//                 Submit
+//               </Button>
+//             </Form.Item>
+//           </Form>
+//         </div>
+//       </Content>
+//     </div>
+//   );
+// }
+
+// export default SOW_Form;
 
 // ============================================
 // ============================================
