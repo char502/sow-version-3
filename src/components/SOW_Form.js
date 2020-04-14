@@ -24,11 +24,11 @@ const sowOptions = [
   },
   {
     name: "GGG",
-    subOptions: ["option1", "option2", "option3"],
+    subOptions: ["GGGoption1", "GGGoption2", "GGGoption3"],
   },
   {
     name: "ABC",
-    subOptions: ["option1", "option2", "option3"],
+    subOptions: ["ABCoption1", "ABCoption2", "ABCoption3"],
   },
 ];
 
@@ -49,11 +49,11 @@ const teraDataOptions = [
 
 function SOW_Form() {
   const [form, setForm] = useState({
-    sow: [],
+    productSow: [],
     teradata: [],
   });
   const [uiVisibility, setUiVisibility] = useState({
-    sow: false,
+    productSow: false,
     teradata: false,
     customServices: false,
   });
@@ -61,8 +61,10 @@ function SOW_Form() {
   const handleCategories = (name) =>
     setUiVisibility({ ...uiVisibility, [name]: !uiVisibility[name] });
 
-  const handleDropdowns = (key, value) => {
-    setForm({ ...form, [key]: [...form[key], value] });
+  const handleDropdowns = (key, option, value) => {
+    let name = option.name;
+    // setForm({ ...form, [key]: [{ ...form[key], name, value }] });
+    setForm({ ...form, [key]: [...form[key], { name, value }] });
   };
 
   // console.log(form);
@@ -71,9 +73,9 @@ function SOW_Form() {
     e.preventDefault();
     console.log(form);
 
-    setForm({ sow: [], teradata: [] });
+    setForm({ productSow: [], teradata: [] });
 
-    console.log(form.sow, form.teradata);
+    console.log(form.productSow, form.teradata);
   };
 
   console.log(form);
@@ -82,9 +84,12 @@ function SOW_Form() {
     <form onSubmit={handleSubmit}>
       <div>
         <label>
-          <input type="checkbox" onClick={() => handleCategories("sow")} />
+          <input
+            type="checkbox"
+            onClick={() => handleCategories("productSow")}
+          />
           Product Sow
-          {uiVisibility.sow &&
+          {uiVisibility.productSow &&
             sowOptions.map((option) => (
               <Card>
                 <Dropdown
@@ -92,7 +97,9 @@ function SOW_Form() {
                     <Menu>
                       {option.subOptions.map((cell) => (
                         <Menu.Item
-                          onClick={() => handleDropdowns("sow", cell)}
+                          onClick={() =>
+                            handleDropdowns("productSow", option, cell)
+                          }
                           key={cell}
                         >
                           {cell}
@@ -119,7 +126,9 @@ function SOW_Form() {
                     <Menu>
                       {option.subOptions.map((cell) => (
                         <Menu.Item
-                          onClick={() => handleDropdowns("teradata", cell)}
+                          onClick={() =>
+                            handleDropdowns("teradata", option, cell)
+                          }
                           key={cell}
                         >
                           {cell}
