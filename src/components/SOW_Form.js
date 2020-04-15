@@ -1,5 +1,3 @@
-//This is Thomas
-
 import React, { useState, useEffect } from "react";
 import Form, { Field } from "rc-field-form";
 import {
